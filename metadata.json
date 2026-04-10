@@ -1,0 +1,5 @@
+{
+  "name": "Maestro University ID Generator",
+  "description": "A tool for students to generate and print their digital double-sided student ID cards.",
+  "requestFramePermissions": []
+}

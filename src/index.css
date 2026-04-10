@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-maestro-dark: #1A1A1A;
+  --color-maestro-cream: #F2EFE9;
+}
+
+@layer utilities {
+  .id-card-vertical {
+    width: 2.125in;
+    height: 3.375in;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 0.125in;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .id-card-horizontal {
+    width: 3.375in;
+    height: 2.125in;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 0.125in;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  @media print {
+    body {
+      background-color: white;
+    }
+    body * {
+      visibility: hidden;
+    }
+    .print-section, .print-section * {
+      visibility: visible;
+    }
+    .print-section {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 0.5in;
+      padding-top: 0.5in;
+    }
+    .id-card-vertical, .id-card-horizontal {
+      box-shadow: none;
+      border: 1px dashed #ccc; /* Guide for cutting */
+    }
+    .no-print {
+      display: none !important;
+    }
+  }
+}
