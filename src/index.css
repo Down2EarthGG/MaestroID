@@ -69,6 +69,21 @@
   }
 
   @media print {
+    @page {
+      margin: 0; /* Removing page margins prevents print shifts */
+    }
+    /* Un-flex the entire application layout to permit standard printing pagination */
+    html, body, #root, .min-h-screen, .flex-1 {
+      display: block !important;
+      position: static !important;
+      height: auto !important;
+      width: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    
     body {
       background-color: white !important;
     }
@@ -79,25 +94,62 @@
       visibility: visible;
     }
     .print-section {
-      position: absolute;
-      left: 0;
-      top: 0;
+      /* Remove absolute positioning to restore page-break functionality! */
+      position: static !important;
       width: 100%;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      gap: 0.4in;
-      padding-top: 0.4in;
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
-    .id-card-vertical, .id-card-horizontal {
-      box-shadow: none !important;
-      outline: 0.5pt dashed #aaa;
-      outline-offset: 3pt;
+    
+    /* override any flex on the react motion wrapper elements */
+    .print-section > div {
+      display: block !important;
     }
-    .no-print {
-      display: none !important;
-    }
+    
+  .id-card-vertical, .id-card-horizontal {
+    box-shadow: none !important;
+    /* Standard cut guide suitable for double sided bleed/trim lines */
+    outline: 0.5pt dashed #aaa;
+    outline-offset: 2pt;
+    
+    /* Center card horizontally on page */
+    margin: 0 auto !important;
+    
+    /* Force each face of the card to its own separate printed page completely centered */
+    page-break-after: always;
+    break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    
+    /* Push down near the vertical center to ensure exact alignment when duplex flipping */
+    position: relative !important;
+    
+    /* Maximize DPI by disabling pixel-snapping and hinting on tiny fonts */
+    text-rendering: geometricPrecision !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  /* CRITICAL: Force removal of all Framer Motion GPU transform matrices during print.
+     Chrome will severely downgrade DPI and rasterize the entire card if a transform exists. */
+  .print-section * {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .id-card-vertical {
+    top: 3.8125in !important;
+  }
+
+  .id-card-horizontal {
+    top: 4.4375in !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
   }
 }
